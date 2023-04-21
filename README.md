@@ -94,7 +94,7 @@ remocon:
 
 key | optional | type | default | description
 -- | -- | -- | -- | --
-`base_url` | False | string | https://www.remocon-net.remotethermo.com | emocon-net cloud service url
+`base_url` | False | string | <https://www.remocon-net.remotethermo.com> | Remocon-net cloud service url
 `username` | False | string | | Your ELCO username to access remocon-net cloud service, recommended to use secrets.
 `password` | False | string | |Your ELCO password to access remocon-net cloud service, recommended to use secrets.
 `gateway_id` | False | string | | Your gateway id
