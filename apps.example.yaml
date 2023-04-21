@@ -5,7 +5,7 @@ remocon:
   base_url: https://www.remocon-net.remotethermo.com
   username: !secret remocon_username
   password: !secret remocon_password
-  bearer_token: !secret remocon_bearer_token
   gateway_id: !secret remocon_gateway_id
+  bearer_token: !secret remocon_bearer_token
   # refresh_rate: 60 # optional
   #ha_url:  # optional, in case hassplugin ha_url undefined

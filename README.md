@@ -85,12 +85,22 @@ remocon:
   base_url: https://www.remocon-net.remotethermo.com
   username: !secret remocon_username
   password: !secret remocon_password
-  bearer_token: !secret remocon_bearer_token
   gateway_id: !secret remocon_gateway_id
+  bearer_token: !secret remocon_bearer_token
   # refresh_rate: 60 # optional
   #ha_url:  # optional, in case hassplugin ha_url undefined
 ```
 <!-- MARKDOWN-AUTO-DOCS:END -->
+
+key | optional | type | default | description
+-- | -- | -- | -- | --
+`base_url` | False | string | https://www.remocon-net.remotethermo.com | emocon-net cloud service url
+`username` | False | string | | Your ELCO username to access remocon-net cloud service, recommended to use secrets.
+`password` | False | string | |Your ELCO password to access remocon-net cloud service, recommended to use secrets.
+`gateway_id` | False | string | | Your gateway id
+`bearer_token` | False | string | | Long-lived Home Assistant token
+`refresh_rate` | True | int | 60 | The crawl rate in minutes
+`ha_url` | True | string | | HA url for callback
 
 ## Usage
 
