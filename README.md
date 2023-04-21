@@ -37,6 +37,8 @@ The `bearer_token` refers to a long-lived Home Assistant token.
 
 Define your app like the following:
 
+<!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./apps.yaml.example) -->
+<!-- The below code snippet is automatically added from ./apps.yaml.example -->
 ```yaml
 remocon:
   module: elco-remocon-net-appdaemon
@@ -50,6 +52,7 @@ remocon:
   # refresh_rate: 60 # optional
   #ha_url:  # optional, in case hassplugin ha_url undefined
 ```
+<!-- MARKDOWN-AUTO-DOCS:END -->
 
 ## Usage
 

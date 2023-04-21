@@ -1,3 +1,12 @@
+secrets.yaml
+appdaemon.yaml
+compiled/
+dashboards/
+namespaces/
+www/
+appdaemons/
+apps/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

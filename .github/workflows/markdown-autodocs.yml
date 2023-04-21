@@ -1,0 +1,23 @@
+name: markdown-autodocs
+
+on:
+  push:
+    paths:
+      - '**.yaml'
+  workflow_dispatch: # Allow manual trigger
+
+  workflow_run:
+    workflows:
+      - generate-artifacts
+    types:
+      - completed
+
+jobs:
+  auto-update-readme:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: Markdown autodocs
+          uses: dineshsonachalam/markdown-autodocs@v1.0.7
+          with:
+            output_file_paths: '[./README.md]'
