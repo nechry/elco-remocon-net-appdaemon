@@ -12,14 +12,31 @@ class Remocon(hass.Hass):
         self.log(f"Will fetch remocon.net data every {refresh_rate} min")
         self.run_every(self.get_remocon_data, "now", refresh_rate * 60)
     
-    def post_to_entities(self, data):
+    def post_to_entities(self, payload):
         self.log("Posting to entities...")
         
-        #self.log(json.dumps(data))        
-        def _post_plantData():
-            pass
+        def _post_data(self, sensor, data):
+            entity_url = f"{ha_url}/api/states/{sensor}"
+            token = "Bearer {}".format(self.args["bearer_token"])
+            headers = {"Authorization": token, "Content-Type": "application/json"}
+            try:  
+                result = requests.post(entity_url, json=payload, headers=headers)
+                self.log(f"POST'ed {sensor} to {entity_url}")
+            except Exception as e:
+                self.log(e)            
+                
+        def _post_plantData(self, data):
+            payload = {
+                "state": data.plantData.outsideTemp,
+                "attributes": {
+                    "unit_of_measurement": "°C",
+                    "device_class": "temperature"
+                },
+                "friendly_name": "Elco Outside Temperature"
+            }
+            self._post_data("sensor.elco_outside_temperature", payload)
         
-        def _post_zoneData():
+        def _post_zoneData(self, data):
             pass
         
         try:
