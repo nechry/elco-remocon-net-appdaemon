@@ -45,10 +45,10 @@ remocon:
   class: Remocon
   plugin: HASS
   base_url: https://www.remocon-net.remotethermo.com
-  username: <your_remocon_username>
-  password: <your_remocon_password>
-  bearer_token: <HA_LONG_LIVE_TOKEN>
-  gateway_id: <your_remocon_gateway_id>
+  username: !secret remocon_username
+  password: !secret remocon_password
+  bearer_token: !secret remocon_bearer_token
+  gateway_id: !secret remocon_gateway_id
   # refresh_rate: 60 # optional
   #ha_url:  # optional, in case hassplugin ha_url undefined
 ```
