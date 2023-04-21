@@ -1,8 +1,6 @@
 # elco-remocon-net-appdaemon
 
-ELCO Remocon.net AppDaemon app to retrieve data from the gas boiler system via the Elco Remocon-Net cloud service and push them to home-assistant entities.
-
-This appdaemon will go fetch your gas data from ELCO Remocon.net's portal, which you would find at https://www.remocon-net.remotethermo.com
+ELCO Remocon.net AppDaemon app to fetch data from the gas boiler system via the Elco Remocon-Net cloud service and push them to home-assistant entities.
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
@@ -18,6 +16,10 @@ No additional python packages are required.
 
 ## Configuration
 
+You need to provide your `gateway_id`, which you would find at https://www.remocon-net.remotethermo.com
+
+For this, you also need to provide your `username` and `password` to access the Elco Remocon-Net cloud service.
+
 ### secrets.yaml
 
 You will need the following in your secrets.yaml file
@@ -25,7 +27,7 @@ You will need the following in your secrets.yaml file
 ```yaml
 username: <YOUR_EMAIL>
 password: <YOUR_PASSWORD>
-gateway_id: "<YOUR_INSTALLATION_NUMBER>"
+gateway_id: <YOUR_INSTALLATION_NUMBER>
 bearer_token: <HA_LONG_LIVE_TOKEN>
 ```
 
