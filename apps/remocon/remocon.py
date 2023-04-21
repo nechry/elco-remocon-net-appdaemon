@@ -12,10 +12,10 @@ class Remocon(hass.Hass):
         self.log(f"Will fetch remocon.net data every {refresh_rate} min")
         self.run_every(self.get_remocon_data, "now", refresh_rate * 60)
     
-    def post_to_entities(self, payload):
+    def post_to_entities(self, data):
         self.log("Posting to entities...")
         
-        def _post_data(self, sensor, data):
+        def _post_data(sensor, payload):
             entity_url = f"{ha_url}/api/states/{sensor}"
             token = "Bearer {}".format(self.args["bearer_token"])
             headers = {"Authorization": token, "Content-Type": "application/json"}
@@ -25,18 +25,18 @@ class Remocon(hass.Hass):
             except Exception as e:
                 self.log(e)            
                 
-        def _post_plantData(self, data):
-            payload = {
-                "state": data.plantData.outsideTemp,
+        def _post_plantData(plantData):
+            outsideTemp = {
+                "state": plantData["outsideTemp"],
                 "attributes": {
                     "unit_of_measurement": "°C",
                     "device_class": "temperature"
                 },
                 "friendly_name": "Elco Outside Temperature"
             }
-            self._post_data("sensor.elco_outside_temperature", payload)
+            _post_data("sensor.elco_outside_temperature", outsideTemp)
         
-        def _post_zoneData(self, data):
+        def _post_zoneData(zoneData):
             pass
         
         try:
@@ -53,8 +53,8 @@ class Remocon(hass.Hass):
             self.log(e)
             return
         
-        _post_plantData()
-        _post_zoneData()
+        _post_plantData(data["plantData"])
+        _post_zoneData(data["zoneData"])
      
     def get_remocon_data(self, kwargs):
         self.log("Fetching remocon data...")
@@ -94,7 +94,6 @@ class Remocon(hass.Hass):
                 if(response.status_code==200):
                     result_json = json.loads(response.text)
                     self.post_to_entities(result_json['data'])
-                    return
                 else:
                     self.error(response.text)
             else:
