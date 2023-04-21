@@ -28,10 +28,10 @@ Install `Studio Code Server` from Home Assistant's Supervisor Add-on Store to ea
 
 - Click on `HACS` on the left menu bar in Home Assistant Web UI
 - Select the three dots in the top right corner.
-- Select Custom repositories
-- Add the following URL: `https://github.com/nechry/elco-remocon-net-appdaemon` in repository field.
-- Select AppDaemon as category.
-- then click on `ADD`.
+- Select `Custom repositories`
+- Add the following URL: `https://github.com/nechry/elco-remocon-net-appdaemon` to the repository.
+- Select `AppDaemon` for the category.
+- Click the `ADD` button.
 - Click on `Automation` in the right panel
 - Click on Explore & download repositories in the bottom right corner
 - Search for `ELCO Remocon.net AppDaemon`, and click on `ELCO Remocon.net AppDaemon` in the list that appears
