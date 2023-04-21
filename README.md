@@ -24,12 +24,17 @@ Install `Studio Code Server` from Home Assistant's Supervisor Add-on Store to ea
 
 `HACS` is the Home Assistant Community Store and allows for community integrations and automation to be updated easily from the Home Assistant web user interface. You will be notified of updates, and they can be installed by a click on a button.
 
-### Installing Lovelace AppDaemon Backend Application
+### Installing AppDaemon Backend Application
 
 - Click on `HACS` on the left menu bar in Home Assistant Web UI
+- Select the three dots in the top right corner.
+- Select Custom repositories
+- Add the following URL: `https://github.com/nechry/elco-remocon-net-appdaemon` in repository field.
+- Select AppDaemon as category.
+- then click on `ADD`.
 - Click on `Automation` in the right panel
 - Click on Explore & download repositories in the bottom right corner
-- Search for `ELCO Remocon.net`, and click on `ELCO Remocon.net` in the list that appears
+- Search for `ELCO Remocon.net AppDaemon`, and click on `ELCO Remocon.net AppDaemon` in the list that appears
 - In the bottom right corner of the panel that appears, click on Download this repository with HACS
 - A confirmation panel will appear, click on Download, and wait for HACS to proceed with the download
 - The Backend Application is now installed, and HACS will inform you when updates are available
