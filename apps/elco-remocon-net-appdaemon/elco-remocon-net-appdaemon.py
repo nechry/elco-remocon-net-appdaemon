@@ -257,10 +257,10 @@ class Remocon(hass.Hass):
             else:
                 ha_url = self.config["plugins"]["HASS"]["ha_url"]
         except Exception as e:
-            self.log(
+            self.error(
                 "No Home Assistant URL could be found. Please configure ha_url in the app's configuration. Aborting."
             )
-            self.log(e)
+            self.error(e)
             return
 
         _post_plantData(data["plantData"])
@@ -271,10 +271,15 @@ class Remocon(hass.Hass):
         try:
             base_url = self.args.get("base_url")
             gateway = self.args.get("gateway_id")
+            if not gateway:
+                self.error(
+                    "There was a problem getting configuration values, gateway_id is not defined. Aborting."
+                )
+                return
             username = quote(self.args.get("username"), safe="")
             password = quote(self.args.get("password"), safe="")
         except Exception as config_e:
-            self.log("There was a problem getting configuration values. Aborting.")
+            self.error("There was a problem getting configuration values. Aborting.")
             return
         try:
             login_url = f"{base_url}/R2/Account/Login?returnUrl=HTTP/2"
@@ -299,12 +304,10 @@ class Remocon(hass.Hass):
                 if response.status_code == 200:
                     result_json = json.loads(response.text)
                     self.post_to_entities(result_json["data"])
+                    self.log("Done fetching remocon data.")
                 else:
                     self.error(response.text)
             else:
                 self.error(result_json["message"])
-            self.log("Done fetching remocon data.")
         except Exception as e:
             self.error(e)
-        finally:
-            pass

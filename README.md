@@ -80,8 +80,8 @@ The `bearer_token` refers to a long-lived Home Assistant token. You can create o
 
 Define your app like the following:
 
-<!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./apps.example.yaml) -->
-<!-- The below code snippet is automatically added from ./apps.example.yaml -->
+<!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./.apps.example.yaml) -->
+<!-- The below code snippet is automatically added from ./.apps.example.yaml -->
 ```yaml
 remocon:
   module: elco-remocon-net-appdaemon
