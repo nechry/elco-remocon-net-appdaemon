@@ -63,6 +63,8 @@ It is required to have a working Elco Remocon-Net installation with a gateway. B
 
 The `gateway_id` is the number you see in the URL when you are logged in to the Elco Remocon-Net cloud service, which you would find at https://www.remocon-net.remotethermo.com
 
+![gateway_id][gateway_id]
+
 ### secrets.yaml
 
 Add the following information in your secrets.yaml file according to your Remocon-Net profile:
@@ -142,4 +144,5 @@ Readonly access, not set point, for the moment.
 
 [MIT](LICENSE)
 
-[hass-add-on-store]: assets/hass-add-on-store.png
+[hass-add-on-store]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/hass-add-on-store.png
+[gateway_id]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/gateway_id.png
