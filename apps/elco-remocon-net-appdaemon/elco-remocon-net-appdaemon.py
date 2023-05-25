@@ -1,10 +1,10 @@
-from hassapi import Hass
+import hassapi as hass
 import requests
 import json
 from urllib.parse import quote
 
 
-class Remocon(Hass):
+class Remocon(hass.Hass):
     def initialize(self):
         refresh_rate = self.args.get("refresh_rate")
         if refresh_rate is None:
