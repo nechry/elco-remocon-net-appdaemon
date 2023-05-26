@@ -1,7 +1,8 @@
 import hassapi as hass
 import requests
 import json
-from urllib.parse import quote
+from urllib.parse import quote, urljoin
+import posixpath
 
 
 class Remocon(hass.Hass):
@@ -270,6 +271,11 @@ class Remocon(hass.Hass):
         self.log("Fetching remocon data...")
         try:
             base_url = self.args.get("base_url")
+            if base_url is None:
+                base_url = "https://www.remocon-net.remotethermo.com"
+            zone = self.args.get("zone")
+            if zone is None:
+                zone = 1
             gateway = self.args.get("gateway_id")
             if not gateway:
                 self.error(
@@ -278,36 +284,44 @@ class Remocon(hass.Hass):
                 return
             username = quote(self.args.get("username"), safe="")
             password = quote(self.args.get("password"), safe="")
-        except Exception as config_e:
+        except Exception:
             self.error("There was a problem getting configuration values. Aborting.")
             return
         try:
-            login_url = f"{base_url}/R2/Account/Login?returnUrl=HTTP/2"
+            login_url = urljoin(base_url, "R2/Account/Login?returnUrl=HTTP/2")
             payload = f"Email={username}&Password={password}&RememberMe=false"
             headers = {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Cookie": "browserUtcOffset=-120",
             }
             session = requests.session()
-            # login,get session cookie and address for json data
+            # login, get session cookie and address for json data
             response = session.post(url=login_url, headers=headers, data=payload)
-            result_json = json.loads(response.text)
-            if result_json["ok"]:
-                # get zone 1 data
-                payload = {
-                    "useCache": True,
-                    "zone": 1,
-                    "filter": {"progIds": "null", "plant": True, "zone": True},
-                }
-                data_url = f"{base_url}/R2/PlantHomeBsb/GetData/{gateway}"
-                response = session.post(url=data_url, json=payload)
-                if response.status_code == 200:
-                    result_json = json.loads(response.text)
-                    self.post_to_entities(result_json["data"])
-                    self.log("Done fetching remocon data.")
+            if response.status_code == 200:
+                result_json = json.loads(response.text)
+                if result_json["ok"]:
+                    # get zone data
+                    payload = {
+                        "useCache": True,
+                        "zone": zone,
+                        "filter": {"progIds": "null", "plant": True, "zone": True},
+                    }
+                    data_url = urljoin(
+                        base_url, posixpath.join("R2/PlantHomeBsb/GetData", gateway)
+                    )
+                    response = session.post(url=data_url, json=payload)
+                    if response.status_code == 200:
+                        result_json = json.loads(response.text)
+                        self.post_to_entities(result_json["data"])
+                        self.log("Done fetching remocon data.")
+                    else:
+                        error_message = response.text
+                        self.error(f"Fetching error: {error_message}")
                 else:
-                    self.error(response.text)
+                    error_message = result_json["message"]
+                    self.error(f"Authentication failed: {error_message}")
             else:
-                self.error(result_json["message"])
+                error_message = response.text
+                self.error(f"Authentication error: {error_message}")
         except Exception as e:
-            self.error(e)
+            self.error(f"Unhandled exception: {e}")
