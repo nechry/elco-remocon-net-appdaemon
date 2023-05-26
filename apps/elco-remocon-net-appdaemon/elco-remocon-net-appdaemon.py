@@ -17,35 +17,39 @@ class Remocon(hass.Hass):
         self.log("Posting to entities...")
 
         def _post_data(sensor, payload):
-            entity_url = f"{ha_url}/api/states/{sensor}"
-            token = "Bearer {}".format(self.args["bearer_token"])
-            headers = {"Authorization": token, "Content-Type": "application/json"}
             try:
+                # elco_sensor = self.get_entity(sensor)
+                # if elco_sensor is None:
+                entity_url = f"{ha_url}/api/states/{sensor}"
+                token = "Bearer {}".format(self.args["bearer_token"])
+                headers = {"Authorization": token, "Content-Type": "application/json"}
                 result = requests.post(entity_url, json=payload, headers=headers)
-                self.log(f"POST'ed {sensor} to {entity_url}")
+                self.log(f"Set state on entity {sensor}")
+                # else:
+                #     elco_sensor.set_state(state = payload["state"], attributes = payload["attributes"])
+                #     self.log(f"update state of {sensor}")
+
             except Exception as e:
                 self.log(e)
 
         def _post_plantData(plantData):
             elco_outside_temperature = {
-                "unique_id": "elco_outside_temperature",
                 "state": plantData["outsideTemp"],
                 "attributes": {
                     "unit_of_measurement": "°C",
                     "device_class": "temperature",
+                    "friendly_name": "Elco Outside Temperature",
                 },
-                "friendly_name": "Elco Outside Temperature",
             }
             _post_data("sensor.elco_outside_temperature", elco_outside_temperature)
 
             elco_domestic_hot_water_storage_temperature = {
-                "unique_id": "elco_domestic_hot_water_storage_temperature",
                 "state": plantData["dhwStorageTemp"],
                 "attributes": {
                     "unit_of_measurement": "°C",
                     "device_class": "temperature",
+                    "friendly_name": "Elco Domestic Hot Water Storage Temperature",
                 },
-                "friendly_name": "Elco Domestic Hot Water Storage Temperature",
             }
             _post_data(
                 "sensor.elco_domestic_hot_water_storage_temperature",
@@ -53,7 +57,6 @@ class Remocon(hass.Hass):
             )
 
             elco_domestic_hot_water_temperature = {
-                "unique_id": "elco_domestic_hot_water_temperature",
                 "state": plantData["dhwComfortTemp"]["value"],
                 "attributes": {
                     "unit_of_measurement": "°C",
@@ -61,8 +64,8 @@ class Remocon(hass.Hass):
                     "min": plantData["dhwComfortTemp"]["min"],
                     "max": plantData["dhwComfortTemp"]["max"],
                     "step": plantData["dhwComfortTemp"]["step"],
+                    "friendly_name": "Elco Domestic Hot Water Storage Temperature",
                 },
-                "friendly_name": "Elco Domestic Hot Water Storage Temperature",
             }
             _post_data(
                 "sensor.elco_domestic_hot_water_temperature",
@@ -70,7 +73,6 @@ class Remocon(hass.Hass):
             )
 
             elco_domestic_hot_water_reduced_temperature = {
-                "unique_id": "elco_domestic_hot_water_reduced_temperature",
                 "state": plantData["dhwReducedTemp"]["value"],
                 "attributes": {
                     "unit_of_measurement": "°C",
@@ -78,8 +80,8 @@ class Remocon(hass.Hass):
                     "min": plantData["dhwReducedTemp"]["min"],
                     "max": plantData["dhwReducedTemp"]["max"],
                     "step": plantData["dhwReducedTemp"]["step"],
+                    "friendly_name": "Elco Domestic Hot Water Storage Reduced Temperature",
                 },
-                "friendly_name": "Elco Domestic Hot Water Storage Reduced Temperature",
             }
             _post_data(
                 "sensor.elco_domestic_hot_water_reduced_temperature",
@@ -87,13 +89,12 @@ class Remocon(hass.Hass):
             )
 
             elco_domestic_hot_water_storage_mode = {
-                "unique_id": "elco_domestic_hot_water_storage_mode",
                 "state": "on" if plantData["dhwMode"]["value"] == 1 else "off",
                 "attributes": {
                     "device_class": "running",
+                    "friendly_name": "Elco Domestic Hot Water Storage Mode",
+                    "icon": "mdi:hvac",
                 },
-                "icon": "mdi:hvac",
-                "friendly_name": "Elco Domestic Hot Water Storage Mode",
             }
             _post_data(
                 "binary_sensor.elco_domestic_hot_water_storage_mode",
@@ -101,13 +102,12 @@ class Remocon(hass.Hass):
             )
 
             elco_domestic_hot_water_storage_temperature_error = {
-                "unique_id": "elco_domestic_hot_water_storage_temperature_error",
                 "state": "on" if plantData["dhwStorageTempError"] == 1 else "off",
                 "attributes": {
                     "device_class": "problem",
+                    "icon": "mdi:radiator",
+                    "friendly_name": "Elco Domestic Hot Water Storage Temperature Error",
                 },
-                "icon": "mdi:radiator",
-                "friendly_name": "Elco Domestic Hot Water Storage Temperature Error",
             }
             _post_data(
                 "binary_sensor.elco_domestic_hot_water_storage_temperature_error",
@@ -115,13 +115,12 @@ class Remocon(hass.Hass):
             )
 
             elco_outside_temperature_error = {
-                "unique_id": "elco_outside_temperature_error",
                 "state": "on" if plantData["outsideTempError"] == 1 else "off",
                 "attributes": {
                     "device_class": "problem",
+                    "icon": "mdi:radiator",
+                    "friendly_name": "Elco Outside Temperature Error",
                 },
-                "icon": "mdi:radiator",
-                "friendly_name": "Elco Outside Temperature Error",
             }
             _post_data(
                 "binary_sensor.elco_outside_temperature_error",
@@ -129,24 +128,22 @@ class Remocon(hass.Hass):
             )
 
             elco_heatpump_on = {
-                "unique_id": "elco_heatpump_on",
                 "state": "on" if plantData["heatPumpOn"] == 1 else "off",
                 "attributes": {
                     "device_class": "running",
+                    "icon": "mdi:radiator",
+                    "friendly_name": "Elco HeatPump On",
                 },
-                "icon": "mdi:radiator",
-                "friendly_name": "Elco HeatPump On",
             }
             _post_data("binary_sensor.elco_heatpump_on", elco_heatpump_on)
 
             elco_domestic_hot_water_enabled = {
-                "unique_id": "elco_domestic_hot_water_enabled",
                 "state": "on" if plantData["dhwEnabled"] == 1 else "off",
                 "attributes": {
                     "device_class": "running",
+                    "icon": "mdi:radiator",
+                    "friendly_name": "Elco Domestic Hot Water Enabled",
                 },
-                "icon": "mdi:radiator",
-                "friendly_name": "Elco Domestic Hot Water Enabled",
             }
             _post_data(
                 "binary_sensor.elco_domestic_hot_water_enabled",
@@ -155,7 +152,6 @@ class Remocon(hass.Hass):
 
         def _post_zoneData(zoneData):
             elco_comfort_room_temperature_setpoint = {
-                "unique_id": "elco_comfort_room_temperature_setpoint",
                 "state": zoneData["chComfortTemp"]["value"],
                 "attributes": {
                     "unit_of_measurement": "°C",
@@ -163,8 +159,8 @@ class Remocon(hass.Hass):
                     "min": zoneData["chComfortTemp"]["min"],
                     "max": zoneData["chComfortTemp"]["max"],
                     "step": zoneData["chComfortTemp"]["step"],
+                    "friendly_name": "Elco Comfort room Temperature setpoint",
                 },
-                "friendly_name": "Elco Comfort room Temperature setpoint",
             }
             _post_data(
                 "sensor.elco_comfort_room_temperature_setpoint",
@@ -172,7 +168,6 @@ class Remocon(hass.Hass):
             )
 
             elco_reduced_room_temperature_setpoint = {
-                "unique_id": "elco_reduced_room_temperature_setpoint",
                 "state": zoneData["chReducedTemp"]["value"],
                 "attributes": {
                     "unit_of_measurement": "°C",
@@ -180,8 +175,8 @@ class Remocon(hass.Hass):
                     "min": zoneData["chReducedTemp"]["min"],
                     "max": zoneData["chReducedTemp"]["max"],
                     "step": zoneData["chReducedTemp"]["step"],
+                    "friendly_name": "Elco Reduced room Temperature setpoint",
                 },
-                "friendly_name": "Elco Reduced room Temperature setpoint",
             }
             _post_data(
                 "sensor.elco_reduced_room_temperature_setpoint",
@@ -189,24 +184,22 @@ class Remocon(hass.Hass):
             )
 
             elco_room_temperature = {
-                "unique_id": "elco_room_temperature",
                 "state": zoneData["roomTemp"],
                 "attributes": {
                     "unit_of_measurement": "°C",
                     "device_class": "temperature",
+                    "friendly_name": "Elco Room Temperature",
                 },
-                "friendly_name": "Elco Room Temperature",
             }
             _post_data("sensor.elco_room_temperature", elco_room_temperature)
 
             elco_desired_room_temperature = {
-                "unique_id": "elco_desired_room_temperature",
                 "state": zoneData["desiredRoomTemp"],
                 "attributes": {
                     "unit_of_measurement": "°C",
                     "device_class": "temperature",
+                    "friendly_name": "Elco Desired Room Temperature",
                 },
-                "friendly_name": "Elco Desired Room Temperature",
             }
             _post_data(
                 "sensor.elco_desired_room_temperature", elco_desired_room_temperature
@@ -214,11 +207,11 @@ class Remocon(hass.Hass):
 
             mode_dict = {0: "Off", 1: "Comfort", 2: "Reduced", 3: "Frost Protection"}
             elco_room_operation_mode_heating = {
-                "unique_id": "elco_room_operation_mode_heating",
                 "state": mode_dict.get(zoneData["mode"]["value"]),
-                "attributes": {},
-                "icon": "mdi:radiator",
-                "friendly_name": "Elco Room Operation mode heating",
+                "attributes": {
+                    "icon": "mdi:radiator",
+                    "friendly_name": "Elco Room Operation mode heating",
+                },
             }
             _post_data(
                 "sensor.elco_room_operation_mode_heating",
@@ -226,24 +219,22 @@ class Remocon(hass.Hass):
             )
 
             elco_room_heating_is_active = {
-                "unique_id": "elco_room_heating_is_active",
                 "state": "on" if zoneData["isHeatingActive"] == 1 else "off",
                 "attributes": {
                     "device_class": "running",
+                    "friendly_name": "Elco Room Heating is Active",
                 },
-                "friendly_name": "Elco Room Heating is Active",
             }
             _post_data(
                 "binary_sensor.elco_room_heating_is_active", elco_room_heating_is_active
             )
 
             elco_room_heating_is_request = {
-                "unique_id": "elco_room_heating_is_request",
                 "state": "on" if zoneData["heatOrCoolRequest"] == 1 else "off",
                 "attributes": {
                     "device_class": "problem",
+                    "friendly_name": "Elco Room Heating is Request",
                 },
-                "friendly_name": "Elco Room Heating is Request",
             }
             _post_data(
                 "binary_sensor.elco_room_heating_is_request",
@@ -251,11 +242,12 @@ class Remocon(hass.Hass):
             )
 
         try:
-            if self.args["ha_url"]:
+            if self.args.get("ha_url"):
                 # get HA's url from app's first, if configured/overridden by user
                 self.log("Using ha_url from app's configuration")
                 ha_url = self.args["ha_url"]
             else:
+                self.log("Using ha_url from plugins's HASS configuration")
                 ha_url = self.config["plugins"]["HASS"]["ha_url"]
         except Exception as e:
             self.error(
