@@ -205,7 +205,7 @@ class Remocon(hass.Hass):
                 "sensor.elco_desired_room_temperature", elco_desired_room_temperature
             )
 
-            mode_dict = {0: "Off", 1: "Comfort", 2: "Reduced", 3: "Frost Protection"}
+            mode_dict = {0: "Protection", 1: "Automatic", 2: "Reduced", 3: "Comfort"}
             elco_room_operation_mode_heating = {
                 "state": mode_dict.get(zoneData["mode"]["value"]),
                 "attributes": {
