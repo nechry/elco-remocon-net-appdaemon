@@ -140,7 +140,7 @@ key | optional | type | default | description
 | binary_sensor.elco_room_heating_is_active | Elco Room Heating is Active | zoneData.isHeatingActive |  |
 | binary_sensor.elco_room_heating_is_request | Elco Room Heating or Cool is Request | zoneData.heatOrCoolRequest |  |
 | binary_sensor.elco_room_cooling_is_active | Elco Room Cooling is Active | zoneData.isCoolingActive |  |
-
+| binary_sensor.elco_room_temperature_error | Elco Room Temperature Error | zoneData.roomTempError |  |
 
 ## Limitations
 
