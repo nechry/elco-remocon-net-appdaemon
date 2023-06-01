@@ -127,13 +127,20 @@ key | optional | type | default | description
 | sensor.elco_room_temperature | Elco Room Temperature | zoneData.roomTemp | unit_of_measurement: °C |
 | sensor.elco_desired_room_temperature | Elco Desired Room Temperature | zoneData.desiredRoomTemp | unit_of_measurement: °C |
 | sensor.elco_room_operation_mode_heating | Elco Room Operation mode heating | zoneData.mode.value | Protection, Automatic, Reduction, Comfort |
+| sensor.elco_cool_comfort_room_temperature_setpoint | Elco Cool Comfort room Temperature setpoint | zoneData.coolComfortTemp.value | |
+| sensor.elco_cool_reduced_room_temperature_setpoint | Elco Cool Reduced room Temperature setpoint | zoneData.coolReducedTemp.value | |
 | binary_sensor.elco_domestic_hot_water_storage_mode | Elco Domestic Hot Water Storage Mode | plantData.dhwMode.value |  |
 | binary_sensor.elco_domestic_hot_water_storage_temperature_error | Elco Domestic Hot Water Storage Temperature Error | plantData.dhwStorageTempError |  |
 | binary_sensor.elco_outside_temperature_error | Elco Outside Temperature Error | plantData.outsideTempError |  |
 | binary_sensor.elco_heatpump_on | Elco HeatPump On | plantData.heatPumpOn |  |
 | binary_sensor.elco_domestic_hot_water_enabled | Elco Domestic Hot Water Enabled | plantData.dhwEnabled |  |
+| binary_sensor.elco_has_outside_temperature_probe | Elco has Outside Temperature Probe | plantData.hasOutsideTempProbe |  |
+| binary_sensor.elco_flame_sensor | Elco Flame sensor | plantData.flameSensor |  |
+| binary_sensor.elco_has_domestic_hot_water_storage_probe | Elco has Domestic Hot Water Storage Probe | plantData.hasDhwStorageProbe |  |
 | binary_sensor.elco_room_heating_is_active | Elco Room Heating is Active | zoneData.isHeatingActive |  |
-| binary_sensor.elco_room_heating_is_request | Elco Room Heating is Request | zoneData.heatOrCoolRequest |  |
+| binary_sensor.elco_room_heating_is_request | Elco Room Heating or Cool is Request | zoneData.heatOrCoolRequest |  |
+| binary_sensor.elco_room_cooling_is_active | Elco Room Cooling is Active | zoneData.isCoolingActive |  |
+
 
 ## Limitations
 

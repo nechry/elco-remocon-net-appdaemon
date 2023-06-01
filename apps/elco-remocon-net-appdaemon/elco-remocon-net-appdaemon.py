@@ -127,6 +127,40 @@ class Remocon(hass.Hass):
                 elco_outside_temperature_error,
             )
 
+            elco_has_outside_temperature_probe = {
+                "state": "on" if plantData["hasOutsideTempProbe"] == 1 else "off",
+                "attributes": {
+                    "icon": "mdi:radiator",
+                    "friendly_name": "Elco has Outside Temperature Probe",
+                },
+            }
+            _post_data(
+                "binary_sensor.elco_has_outside_temperature_probe",
+                elco_has_outside_temperature_probe,
+            )
+
+            elco_flame_sensor = {
+                "state": "on" if plantData["flameSensor"] == 1 else "off",
+                "attributes": {
+                    "friendly_name": "Elco Flame sensor",
+                },
+            }
+            _post_data(
+                "binary_sensor.elco_flame_sensor",
+                elco_flame_sensor,
+            )
+
+            elco_has_domestic_hot_water_storage_probe = {
+                "state": "on" if plantData["hasDhwStorageProbe"] == 1 else "off",
+                "attributes": {
+                    "friendly_name": "Elco has Domestic Hot Water Storage Probe",
+                },
+            }
+            _post_data(
+                "binary_sensor.elco_has_domestic_hot_water_storage_probe",
+                elco_has_domestic_hot_water_storage_probe,
+            )
+
             elco_heatpump_on = {
                 "state": "on" if plantData["heatPumpOn"] == 1 else "off",
                 "attributes": {
@@ -165,6 +199,38 @@ class Remocon(hass.Hass):
             _post_data(
                 "sensor.elco_comfort_room_temperature_setpoint",
                 elco_comfort_room_temperature_setpoint,
+            )
+
+            elco_cool_comfort_room_temperature_setpoint = {
+                "state": zoneData["coolComfortTemp"]["value"],
+                "attributes": {
+                    "unit_of_measurement": "°C",
+                    "device_class": "temperature",
+                    "min": zoneData["coolComfortTemp"]["min"],
+                    "max": zoneData["coolComfortTemp"]["max"],
+                    "step": zoneData["coolComfortTemp"]["step"],
+                    "friendly_name": "Elco Cool Comfort room Temperature setpoint",
+                },
+            }
+            _post_data(
+                "sensor.elco_cool_comfort_room_temperature_setpoint",
+                elco_cool_comfort_room_temperature_setpoint,
+            )
+
+            elco_cool_reduced_room_temperature_setpoint = {
+                "state": zoneData["coolReducedTemp"]["value"],
+                "attributes": {
+                    "unit_of_measurement": "°C",
+                    "device_class": "temperature",
+                    "min": zoneData["coolReducedTemp"]["min"],
+                    "max": zoneData["coolReducedTemp"]["max"],
+                    "step": zoneData["coolReducedTemp"]["step"],
+                    "friendly_name": "Elco Cool Reduced room Temperature setpoint",
+                },
+            }
+            _post_data(
+                "sensor.elco_cool_reduced_room_temperature_setpoint",
+                elco_cool_reduced_room_temperature_setpoint,
             )
 
             elco_reduced_room_temperature_setpoint = {
@@ -229,16 +295,39 @@ class Remocon(hass.Hass):
                 "binary_sensor.elco_room_heating_is_active", elco_room_heating_is_active
             )
 
+            elco_room_cooling_is_active = {
+                "state": "on" if zoneData["isCoolingActive"] == 1 else "off",
+                "attributes": {
+                    "device_class": "running",
+                    "friendly_name": "Elco Room Cooling is Active",
+                },
+            }
+            _post_data(
+                "binary_sensor.elco_room_cooling_is_active", elco_room_cooling_is_active
+            )
+
             elco_room_heating_is_request = {
                 "state": "on" if zoneData["heatOrCoolRequest"] == 1 else "off",
                 "attributes": {
                     "device_class": "problem",
-                    "friendly_name": "Elco Room Heating is Request",
+                    "friendly_name": "Elco Room Heating or Cool is Request",
                 },
             }
             _post_data(
                 "binary_sensor.elco_room_heating_is_request",
                 elco_room_heating_is_request,
+            )
+
+            elco_room_temperature_error = {
+                "state": "on" if zoneData["roomTempError"] == 1 else "off",
+                "attributes": {
+                    "device_class": "problem",
+                    "friendly_name": "Elco has Outside Temperature Probe",
+                },
+            }
+            _post_data(
+                "binary_sensor.elco_room_temperature_error",
+                elco_room_temperature_error,
             )
 
         try:
