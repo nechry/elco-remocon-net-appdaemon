@@ -1,0 +1,38 @@
+# CLOSE ISSUE BOT
+# ---------------
+# A bot which helps you to close issues that don't include some specific contents.
+# See how to use it in https://github.com/offu/close-issue-app.
+
+# Comment that will be sent if an issue is judged to be closed.
+comment: ""
+  
+issueConfigs:
+# There can be several configs for different kind of issues.
+- content:
+# template 1: bug report
+  - "PROBLEM DESCRIPTION"
+  - "REQUESTED INFORMATION"
+  - "TO REPRODUCE"
+  - "EXPECTED BEHAVIOUR" 
+- content:
+# template 2: feature request
+  - "FEATURE DESCRIPTION"
+  - "PANEL / FIRMWARE VERION"
+- content:
+# template 3: waiting for content
+  - "Provide your appdaemon.yaml"
+  - "Provide your apps.yaml"
+  - "put of the log after restarting the appdaemon container"
+  
+# Optional configuration:
+#
+# whether the keywords are case-insensitive
+# default value is false, which means keywords are case-sensitive
+caseInsensitive: true
+# the label that will be added when the bot close an issue
+# The bot will only add a label if this property is set.
+label: "template missing/incomplete"
+# The issue is judged to be legal if it includes all keywords from any of these two configs.
+# Or it will be closed by the app.
+exception:
+  - "nechry"
