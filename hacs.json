@@ -1,5 +1,5 @@
 {
     "name": "ELCO Remocon.net AppDaemon",
     "content_in_root": true,    
-    "render_readme": true
+    "render_readme": false
 }
