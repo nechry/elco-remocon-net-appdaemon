@@ -1,8 +1,16 @@
 # elco-remocon-net-appdaemon
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![GitHub Release][releases-shield]][releases]
+[![License][license-shield]](LICENSE.md)
+
+[![Github Actions][github-actions-shield]][github-actions]
+![Project Maintenance][maintenance-shield]
+[![GitHub Activity][commits-shield]][commits]
+
 ELCO Remocon.net AppDaemon app to fetch data from the gas boiler system via the Elco Remocon-Net cloud service and push them to home-assistant entities.
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![Sponsor Nechry via GitHub Sponsors][github-sponsors-shield]][github-sponsors]
 
 ## Installation
 
@@ -153,3 +161,14 @@ Readonly access, not set point, for the moment.
 
 [hass-add-on-store]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/hass-add-on-store.png
 [gateway_id]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/gateway_id.png
+
+[commits-shield]: https://img.shields.io/github/commit-activity/y/nechry/elco-remocon-net-appdaemon.svg
+[commits]: https://github.com/nechry/elco-remocon-net-appdaemon/commits/main
+[releases-shield]: https://img.shields.io/github/release/nechry/elco-remocon-net-appdaemon.svg
+[releases]: https://github.com/nechry/elco-remocon-net-appdaemon/releases
+[license-shield]: https://img.shields.io/github/license/nechry/elco-remocon-net-appdaemon.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
+[github-actions-shield]: https://github.com/nechry/elco-remocon-net-appdaemon/actions/workflows/hacs-validation.yaml/badge.svg
+[github-actions]: https://github.com/nechry/elco-remocon-net-appdaemon/actions
+[github-sponsors-shield]: https://github.com/nechry/nechry/raw/master/assets/GitHub_Sponsorship_button.png
+[github-sponsors]: https://github.com/sponsors/nechry
