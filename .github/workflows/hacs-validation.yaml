@@ -1,4 +1,4 @@
-name: Validate with HACS
+name: Validate for HACS
 
 on:
   push:
@@ -8,12 +8,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  hacs:
+  hacs-validate:
     name: HACS Action
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v3"
-      - name: HACS validation
+      - name: 📥 Checkout the repository
+        uses: actions/checkout@v3.0.2
+      - name: 🏃 HACS validation
         uses: "hacs/action@main"
         with:
           category: "appdaemon"
+          
+  hassfest-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout the repository
+        uses: actions/checkout@v3.0.2
+      - name: 🏃 Hassfest validation
+        uses: home-assistant/actions/hassfest@master
