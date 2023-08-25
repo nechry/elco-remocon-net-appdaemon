@@ -153,6 +153,15 @@ key | optional | type | default | description
 
 This appdaemon's app only supports 1 gateway.
 Readonly access, not set point, for the moment.
+No support for: Hot Water Heat Pumps
+
+### Tested system
+
+- THISION S boiler
+- Altron B boiler
+  
+###
+
 
 ## License
 
