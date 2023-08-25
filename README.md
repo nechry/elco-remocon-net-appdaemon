@@ -151,9 +151,9 @@ key | optional | type | default | description
 
 ## Limitations
 
-This appdaemon's app only supports 1 gateway.
-Readonly access, not set point, for the moment.
-No support for: Hot Water Heat Pumps
+- This appdaemon's app only supports 1 gateway.
+- Readonly access, not set point, for the moment.
+- No support for Hot Water Heat Pumps
 
 ### Tested system
 
