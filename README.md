@@ -1,6 +1,6 @@
 # elco-remocon-net-appdaemon
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-41BDF5.svg)](https://github.com/hacs/integration)
 [![GitHub Release][releases-shield]][releases]
 [![License][license-shield]](LICENSE.md)
 [![Github Actions][github-actions-shield]][github-actions]
@@ -33,18 +33,7 @@ Install `Studio Code Server` from Home Assistant's Supervisor Add-on Store to ea
 
 ### Installing AppDaemon Backend Application
 
-- Click on `HACS` on the left menu bar in Home Assistant Web UI
-- Select the three dots in the top right corner.
-- Select `Custom repositories`
-- Add the following URL: `https://github.com/nechry/elco-remocon-net-appdaemon` to the repository.
-- Select `AppDaemon` for the category.
-- Click the `ADD` button.
-- Click on `Automation` in the right panel
-- Click on Explore & download repositories in the bottom right corner
-- Search for `ELCO Remocon.net AppDaemon`, and click on `ELCO Remocon.net AppDaemon` in the list that appears
-- In the bottom right corner of the panel that appears, click on Download this repository with HACS
-- A confirmation panel will appear, click on Download, and wait for HACS to proceed with the download
-- The Backend Application is now installed, and HACS will inform you when updates are available
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=nechry&repository=elco-remocon-net-appdaemon&category=appdaemon)
 
 ## Configuration
 
