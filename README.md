@@ -63,13 +63,13 @@ The `gateway_id` is the number you see in the URL when you are logged in to the 
 
 ### secrets.yaml
 
-Add the following information in your secrets.yaml file according to your Remocon-Net profile:
+Add the following information in your secrets.yaml file located in the /config/appdaemon/apps/ folder (or create if it does not exist yet) according to your Remocon-Net profile:
 
 ```yaml
-username: <YOUR_EMAIL>
-password: <YOUR_PASSWORD>
-gateway_id: <YOUR_INSTALLATION_NUMBER>
-bearer_token: <HA_LONG_LIVE_TOKEN>
+remocon_username: <YOUR_EMAIL>
+remocon_password: <YOUR_PASSWORD>
+remocon_gateway_id: <YOUR_INSTALLATION_NUMBER>
+remocon_bearer_token: <HA_LONG_LIVE_TOKEN>
 ```
 
 The `bearer_token` refers to a long-lived Home Assistant token. You can create one in your Home Assistant profile page.
