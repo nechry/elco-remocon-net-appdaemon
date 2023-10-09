@@ -21,11 +21,13 @@ The backend application for HomeAssistant is written in a python for AppDaemon. 
 
 The easiest way to install it is through Home Assistant's Supervisor Add-on Store, it will be automatically connected to your Home Assistant Instance.
 
-### Installing Studio Code Server
+### (Optional) Installing Studio Code Server
 
 You will need a way to edit the `apps.yaml` config file in the Appdaemon folder.
 
 Install `Studio Code Server` from Home Assistant's Supervisor Add-on Store to easily edit configuration Files on your HomeAssistant Instance.
+
+Any other method to modify your configuration files will also work.
 
 ### Installing HomeAssistant Community Store
 
@@ -36,6 +38,20 @@ Install `Studio Code Server` from Home Assistant's Supervisor Add-on Store to ea
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=nechry&repository=elco-remocon-net-appdaemon&category=appdaemon)
 
 ## Configuration
+
+Create a [Long Lived Access Tokens](https://www.home-assistant.io/docs/authentication/#your-account-profile) for appdaemon, and save it in your `/config/secrets.yaml` file.
+
+Assing the token to the plugins HASS section in `/config/appdaemon/appdaemon.yaml` file.
+
+```yaml
+plugins:
+    HASS:
+      type: hass
+      ha_url: http://homeassistant.local:8123
+      token: !secret appdaemon_token
+```
+
+Ensure to set a valid `ha_url` to match your setup.
 
 ### AppDaemon's python packages pre-requisites
 
@@ -66,13 +82,20 @@ The `gateway_id` is the number you see in the URL when you are logged in to the 
 Add the following information in your secrets.yaml file according to your Remocon-Net profile:
 
 ```yaml
-username: <YOUR_EMAIL>
-password: <YOUR_PASSWORD>
-gateway_id: <YOUR_INSTALLATION_NUMBER>
-bearer_token: <HA_LONG_LIVE_TOKEN>
+remocon_username: <YOUR_EMAIL>
+remocon_password: <YOUR_PASSWORD>
+remocon_gateway_id: <YOUR_INSTALLATION_NUMBER>
+remocon_bearer_token: <REMOCON_LONG_LIVE_TOKEN>
 ```
 
-The `bearer_token` refers to a long-lived Home Assistant token. You can create one in your Home Assistant profile page.
+The `remocon_bearer_token` refers to a second long-lived Home Assistant token. Create a new one in your Home Assistant profile page for Remocon app.
+
+Attention: For Apps in the AppDaemon, the `secrets.yaml` file location is define/configurable in `/config/appdaemon/appdaemon.yaml` file.
+```yaml
+secrets: /config/secrets.yaml
+```
+
+In this case I share same  `secrets.yaml` file of Home-Assistant instance.
 
 ### apps.yaml
 
