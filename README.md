@@ -161,6 +161,118 @@ key | optional | type | default | description
 | binary_sensor.elco_room_cooling_is_active | Elco Room Cooling is Active | zoneData.isCoolingActive |  |
 | binary_sensor.elco_room_temperature_error | Elco Room Temperature Error | zoneData.roomTempError |  |
 
+## Home Assistant dashboard
+
+I build a simple dashboard with the following 3 cards definition
+
+![home-assistant-card][home-assistant-card]
+
+### Room temperature
+
+To display the room temperature, the desired temperature, the operation mode and the heating status.
+
+Just copy this yaml code and paste it in `Manual card`.
+
+```yaml
+type: entities
+entities:
+  - entity: sensor.elco_room_temperature
+    name: Current room temperature
+    secondary_info: last-changed
+  - entity: sensor.elco_desired_room_temperature
+    name: Desired temperature
+    secondary_info: last-changed
+    type: custom:multiple-entity-row
+    show_state: true
+    entities:
+      - entity: sensor.elco_reduced_room_temperature_setpoint
+        name: Reduced
+      - entity: sensor.elco_comfort_room_temperature_setpoint
+        name: Comfort
+      - entity: sensor.elco_outside_temperature
+        name: Outside
+  - entity: sensor.elco_room_operation_mode_heating
+    name: Operation mode heating
+    secondary_info: last-updated
+  - entity: binary_sensor.elco_room_heating_is_active
+    type: custom:uptime-card
+    title_template: Heating
+    hours_to_show: 48
+    status_adaptive_color: true
+    alias:
+      ok: Active
+      ko: Idle
+    show:
+      footer: false
+  - entity: binary_sensor.elco_room_heating_is_request
+    type: custom:uptime-card
+    title_template: Heating
+    hours_to_show: 48
+    status_adaptive_color: true
+    alias:
+      ok: Request
+      ko: Idle
+    show:
+      footer: false
+      title: false
+      icon: false
+title: Home
+state_color: true
+footer:
+  type: graph
+  entity: sensor.elco_room_temperature
+  hours_to_show: 48
+  detail: 2
+```
+
+This card use the custom component [multiple-entity-row](https://github.com/benct/lovelace-multiple-entity-row) available on [HACS](https://hacs.xyz/), you need to install before.
+
+### Domestic hot water
+
+To display the domestic hot water temperature, use this yaml code and paste it in `Manual card`.
+
+```yaml
+type: entities
+entities:
+  - entity: sensor.elco_domestic_hot_water_storage_mode
+    name: Storage Mode
+  - entity: binary_sensor.elco_domestic_hot_water_enabled
+    name: Enabled
+    secondary_info: none
+  - entity: sensor.elco_domestic_hot_water_temperature
+    name: Temperature
+    secondary_info: none
+  - entity: sensor.elco_domestic_hot_water_storage_temperature
+    name: Storage Temperature
+    secondary_info: last-changed
+title: Domestic Hot Water
+state_color: true
+footer:
+  type: graph
+  entity: sensor.elco_domestic_hot_water_storage_temperature
+  detail: 1
+```
+
+### Boiler status
+
+And finally to display the boiler status, use this yaml code in `Manual card`.
+
+```yaml
+type: entities
+entities:
+  - entity: binary_sensor.elco_heatpump_on
+    name: Heat Pump
+  - entity: binary_sensor.elco_outside_temperature_error
+    name: Outside Temperature Error
+  - entity: binary_sensor.elco_domestic_hot_water_storage_temperature_error
+    name: Domestic Hot Water Storage Temperature Error
+title: THISION S 14.2 Status
+state_color: true
+footer:
+  type: graph
+  entity: sensor.elco_outside_temperature
+```
+
 ## Limitations
 
 - This appdaemon's app only supports 1 gateway.
@@ -174,14 +286,13 @@ key | optional | type | default | description
   
 ###
 
-
 ## License
 
 [MIT](LICENSE)
 
 [hass-add-on-store]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/hass-add-on-store.png
 [gateway_id]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/gateway_id.png
-
+[home-assistant-card]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/home-assistant-card.png
 [commits-shield]: https://img.shields.io/github/commit-activity/y/nechry/elco-remocon-net-appdaemon.svg
 [commits]: https://github.com/nechry/elco-remocon-net-appdaemon/commits/main
 [releases-shield]: https://img.shields.io/github/release/nechry/elco-remocon-net-appdaemon.svg
