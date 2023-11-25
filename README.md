@@ -127,6 +127,7 @@ key | optional | type | default | description
 `bearer_token` | False | string | | Long-lived Home Assistant token
 `refresh_rate` | True | int | 60 | The crawl rate in minutes
 `ha_url` | True | string | | HA url for callback
+`zone` | True | int | 1 | Zone number
 
 ## Usage
 
