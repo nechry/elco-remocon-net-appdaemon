@@ -39,9 +39,32 @@ Any other method to modify your configuration files will also work.
 
 ## Configuration
 
+### ⚠️ appdaemon location changed
+
+With appdaemon 0.15 release, the appdaemon data folder will migrate/move out of the Home Assistant configuration folder into a dedicated folder for this add-on  `/addon_configs/<guid>_appdaemon/` . You can access add-on configuration folders using SSH, Samba, VSCode, and similar add-ons by accessing the addon_configs folder/share.
+
+If you have this in your appdaemon.yaml file:
+```yaml
+secrets: /config/secrets.yaml
+```
+You will need to adjust this to:
+```yaml
+secrets: /homeassistant/secrets.yaml
+```
+
+see: [https://github.com/hassio-addons/addon-appdaemon/pull/290](https://github.com/hassio-addons/addon-appdaemon/releases/tag/v0.15.0)
+
+### ⚠️ HACS didn't yet install the addons in /addon_configs/ folder
+
+HACS install the addon inside the previous `adddaemon` folder not inside the new structure, you will have to manualy move the structure `apps/elco-remocon-net-appdaemon` folder inside of the  `/addon_configs/<guid>_appdaemon/` folder see issues #8
+
+I hope this will be soon fixed on HACS
+
+### Long Lived Token
+
 Create a [Long Lived Access Tokens](https://www.home-assistant.io/docs/authentication/#your-account-profile) for appdaemon, and save it in your `/config/secrets.yaml` file.
 
-Assing the token to the plugins HASS section in `/config/appdaemon/appdaemon.yaml` file.
+Assing the token to the plugins HASS section in `/addon_configs/<guid>_appdaemon/appdaemon.yaml` file.
 
 ```yaml
 plugins:
@@ -90,14 +113,16 @@ remocon_bearer_token: <REMOCON_LONG_LIVE_TOKEN>
 
 The `remocon_bearer_token` refers to a second long-lived Home Assistant token. Create a new one in your Home Assistant profile page for Remocon app.
 
-Attention: For Apps in the AppDaemon, the `secrets.yaml` file location is define/configurable in `/config/appdaemon/appdaemon.yaml` file.
+Attention: For Apps in the AppDaemon, the `secrets.yaml` file location is define/configurable in `/addon_configs/<guid>_appdaemon/appdaemon.yaml` file.
 ```yaml
-secrets: /config/secrets.yaml
+secrets: /homeassistant/secrets.yaml
 ```
 
 In this case I share same  `secrets.yaml` file of Home-Assistant instance.
 
 ### apps.yaml
+
+location: `/addon_configs/<guid>_appdaemon/apps.yaml` 
 
 Define your app like the following:
 
