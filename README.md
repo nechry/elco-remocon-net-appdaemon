@@ -6,6 +6,7 @@
 [![Github Actions][github-actions-shield]][github-actions]
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
+[![CodeQL](https://github.com/nechry/elco-remocon-net-appdaemon/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/nechry/elco-remocon-net-appdaemon/actions/workflows/codeql-analysis.yml)
 
 ELCO Remocon.net AppDaemon app to fetch data from the gas boiler system via the Elco Remocon-Net cloud service and push them to home-assistant entities.
 
