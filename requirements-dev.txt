@@ -1,4 +1,4 @@
 pre-commit
-setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=71.0.2
 request>=2.32.2
 zipp>=3.19.1
