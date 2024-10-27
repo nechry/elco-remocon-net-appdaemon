@@ -59,6 +59,8 @@ see: [https://github.com/hassio-addons/addon-appdaemon/pull/290](https://github.
 
 HACS install the addon inside the previous `adddaemon` folder not inside the new structure, you will have to manualy move the structure `apps/elco-remocon-net-appdaemon` folder inside of the  `/addon_configs/<guid>_appdaemon/` folder see issues #8
 
+![hass-add-on-folders][hass-add-on-folders]
+
 I hope this will be soon fixed on HACS
 
 ### Long Lived Token
@@ -317,6 +319,7 @@ footer:
 
 [MIT](LICENSE)
 
+[hass-add-on-folders]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/hass-add-on-folders.jpeg
 [hass-add-on-store]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/hass-add-on-store.png
 [gateway_id]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/gateway_id.png
 [home-assistant-card]: https://github.com/nechry/elco-remocon-net-appdaemon/raw/main/assets/home-assistant-card.png
