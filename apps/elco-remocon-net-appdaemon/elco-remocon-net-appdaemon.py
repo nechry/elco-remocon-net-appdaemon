@@ -1,4 +1,5 @@
 import hassapi as hass
+from datetime import datetime
 import requests
 import json
 from urllib.parse import quote, urljoin
@@ -11,7 +12,11 @@ class Remocon(hass.Hass):
         if refresh_rate is None:
             refresh_rate = 60
         self.log(f"Will fetch remocon.net data every {refresh_rate} min")
-        self.run_every(self.get_remocon_data, "now", refresh_rate * 60)
+        self.run_every(self.get_remocon_data, datetime.now(), refresh_rate * 60)
+        # fetch data immediately on startup
+        self.log("Fetching remocon.net data immediately on startup")        
+        self.get_remocon_data(None)
+        self.log("Fetching remocon.net data completed")
 
     def post_to_entities(self, data):
         self.log("Posting to entities...")
@@ -23,7 +28,7 @@ class Remocon(hass.Hass):
                 entity_url = f"{ha_url}/api/states/{sensor}"
                 token = "Bearer {}".format(self.args["bearer_token"])
                 headers = {"Authorization": token, "Content-Type": "application/json"}
-                result = requests.post(entity_url, json=payload, headers=headers)
+                requests.post(entity_url, json=payload, headers=headers)
                 self.log(f"Set state on entity {sensor}")
                 # else:
                 #     elco_sensor.set_state(state = payload["state"], attributes = payload["attributes"])
@@ -362,6 +367,7 @@ class Remocon(hass.Hass):
                     "There was a problem getting configuration values, gateway_id is not defined. Aborting."
                 )
                 return
+
             username = quote(self.args.get("username"), safe="")
             password = quote(self.args.get("password"), safe="")
         except Exception:
@@ -389,6 +395,7 @@ class Remocon(hass.Hass):
                     data_url = urljoin(
                         base_url, posixpath.join("R2/PlantHomeBsb/GetData", gateway)
                     )
+                    self.log(f"Parameters gatewayId: {gateway} zone: {payload}")
                     response = session.post(url=data_url, json=payload)
                     if response.status_code == 200:
                         result_json = json.loads(response.text)
