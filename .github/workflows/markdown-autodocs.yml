@@ -16,7 +16,7 @@ jobs:
   auto-update-readme:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4.2.2
         - name: Markdown autodocs
           uses: dineshsonachalam/markdown-autodocs@v1.0.7
           with:
