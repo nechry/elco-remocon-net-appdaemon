@@ -328,7 +328,7 @@ footer:
 [releases-shield]: https://img.shields.io/github/release/nechry/elco-remocon-net-appdaemon.svg
 [releases]: https://github.com/nechry/elco-remocon-net-appdaemon/releases
 [license-shield]: https://img.shields.io/github/license/nechry/elco-remocon-net-appdaemon.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2025.svg
 [github-actions-shield]: https://github.com/nechry/elco-remocon-net-appdaemon/actions/workflows/validate.yml/badge.svg
 [github-actions]: https://github.com/nechry/elco-remocon-net-appdaemon/actions
 [github-sponsors-shield]: https://github.com/nechry/nechry/raw/master/assets/GitHub_Sponsorship_button.png
