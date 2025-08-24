@@ -1,3 +1,4 @@
 {
-    "name": "ELCO Remocon.net AppDaemon"
+    "name": "ELCO Remocon.net AppDaemon",
+    "content_in_root": true
 }
