@@ -373,12 +373,18 @@ class Remocon(hass.Hass):
                 if not plan:
                     continue
                 slices = sorted(
-                    [s for s in (plan.get("slices") or []) if s is not None],
+                    [
+                        s
+                        for s in (plan.get("slices") or [])
+                        if s is not None and isinstance(s, dict)
+                    ],
                     key=lambda s: s.get("from", 0),
                 )
                 for d in plan.get("days") or []:
-                    if d in by_day:
-                        by_day[d] = slices
+                    if d not in by_day:
+                        self.log(f"Unexpected day index {d} in schedule; skipping")
+                        continue
+                    by_day[d] = slices
 
             def mode_for(flag):
                 return "comfort" if flag == 1 else "reduced"
@@ -455,14 +461,15 @@ class Remocon(hass.Hass):
         _post_plantData(data["plantData"])
         _post_zoneData(data["zoneData"])
         # `timeProgs` is only present when the GetData payload asks for it by
-        # programme id (see the filter in get_remocon_data). Stay quiet when it
-        # is absent so nothing changes for a plant that returns no schedule.
+        # programme id (see the filter in get_remocon_data).
         time_progs = data.get("timeProgs") or []
-        if time_progs:
-            comfort_c = float(data["zoneData"]["chComfortTemp"]["value"])
-            reduced_c = float(data["zoneData"]["chReducedTemp"]["value"])
-            weekly_plan = (time_progs[0] or {}).get("weeklyPlan") or {}
-            _post_schedule(weekly_plan, comfort_c, reduced_c)
+        if not time_progs:
+            self.log("No timeProgs in response; schedule sensors will not be updated")
+            return
+        comfort_c = float(data["zoneData"]["chComfortTemp"]["value"])
+        reduced_c = float(data["zoneData"]["chReducedTemp"]["value"])
+        weekly_plan = (time_progs[0] or {}).get("weeklyPlan") or {}
+        _post_schedule(weekly_plan, comfort_c, reduced_c)
 
     def get_remocon_data(self, kwargs):
         self.log("Fetching remocon data...")
