@@ -5,6 +5,18 @@ import json
 from urllib.parse import quote, urljoin
 import posixpath
 
+# Weekday index -> entity-id suffix. The Remocon NET front-end uses JavaScript's
+# Date.getDay() for the `days` field on schedule slices, so 0 is Sunday.
+WEEKDAY_SUFFIX = {
+    0: "sunday",
+    1: "monday",
+    2: "tuesday",
+    3: "wednesday",
+    4: "thursday",
+    5: "friday",
+    6: "saturday",
+}
+
 
 class Remocon(hass.Hass):
     def initialize(self):
@@ -334,6 +346,103 @@ class Remocon(hass.Hass):
                 data,
             )
 
+        def _post_schedule(weeklyPlan, comfort_temp, reduced_temp):
+            """Publish one sensor per weekday carrying that day's slice list.
+
+            State is the number of slices for the day, so HA history stays
+            useful; the slices themselves are attributes.
+
+            weeklyPlan shape, from the timeProgs entry of the GetData response:
+              {
+                plans: [
+                  {days: [<int day-of-week>, ...],
+                   slices: [{from: <minutes from midnight>, temp: <0|1>}, ...]},
+                  ...
+                ],
+                allowedTemp, defaultTemp, baseTemp, tick, maxSwitches, ext, pilot
+              }
+
+            `slice.temp` is a mode flag (0 = reduced, 1 = comfort), NOT a
+            temperature in degrees. The actual setpoints are scalars held
+            elsewhere, in zoneData.chComfortTemp / chReducedTemp, which is why
+            they are passed in here rather than read off the slice.
+            """
+            plans = (weeklyPlan or {}).get("plans") or []
+            by_day = {d: [] for d in WEEKDAY_SUFFIX}
+            for plan in plans:
+                if not plan:
+                    continue
+                slices = sorted(
+                    [
+                        s
+                        for s in (plan.get("slices") or [])
+                        if s is not None and isinstance(s, dict)
+                    ],
+                    key=lambda s: s.get("from", 0),
+                )
+                for d in plan.get("days") or []:
+                    if d not in by_day:
+                        self.log(f"Unexpected day index {d} in schedule; skipping")
+                        continue
+                    by_day[d] = slices
+
+            def mode_for(flag):
+                return "comfort" if flag == 1 else "reduced"
+
+            def temp_for(flag):
+                return comfort_temp if flag == 1 else reduced_temp
+
+            for day_idx, suffix in WEEKDAY_SUFFIX.items():
+                slices = by_day[day_idx]
+                # Two attributes, because a slice list alone is awkward to
+                # template against:
+                #  - `slices`:    the raw list, plus an HH:MM convenience field
+                #  - `intervals`: each slice closed at the next one (or 24:00),
+                #                 so a card can render spans directly
+                rendered = []
+                intervals = []
+                for i, s in enumerate(slices):
+                    m = int(s.get("from", 0))
+                    flag = s.get("temp")
+                    rendered.append(
+                        {
+                            "from_min": m,
+                            "from_hhmm": f"{m // 60:02d}:{m % 60:02d}",
+                            "flag": flag,
+                            "mode": mode_for(flag),
+                            "temp": temp_for(flag),
+                        }
+                    )
+                    if (i + 1) < len(slices):
+                        end_m = int(slices[i + 1].get("from", 1440))
+                    else:
+                        end_m = 1440
+                    intervals.append(
+                        {
+                            "start_min": m,
+                            "end_min": end_m,
+                            "start_hhmm": f"{m // 60:02d}:{m % 60:02d}",
+                            "end_hhmm": f"{end_m // 60:02d}:{end_m % 60:02d}",
+                            "mode": mode_for(flag),
+                            "temp": temp_for(flag),
+                        }
+                    )
+                _post_data(
+                    f"sensor.elco_schedule_{suffix}",
+                    {
+                        "state": len(rendered),
+                        "attributes": {
+                            "friendly_name": f"Elco Schedule {suffix.capitalize()}",
+                            "icon": "mdi:calendar-clock",
+                            "unit_of_measurement": "slices",
+                            "slices": rendered,
+                            "intervals": intervals,
+                            "ext": (weeklyPlan or {}).get("ext"),
+                            "max_switches": (weeklyPlan or {}).get("maxSwitches"),
+                        },
+                    },
+                )
+
         try:
             if self.args.get("ha_url"):
                 # get HA's url from app's first, if configured/overridden by user
@@ -351,6 +460,16 @@ class Remocon(hass.Hass):
 
         _post_plantData(data["plantData"])
         _post_zoneData(data["zoneData"])
+        # `timeProgs` is only present when the GetData payload asks for it by
+        # programme id (see the filter in get_remocon_data).
+        time_progs = data.get("timeProgs") or []
+        if not time_progs:
+            self.log("No timeProgs in response; schedule sensors will not be updated")
+            return
+        comfort_c = float(data["zoneData"]["chComfortTemp"]["value"])
+        reduced_c = float(data["zoneData"]["chReducedTemp"]["value"])
+        weekly_plan = (time_progs[0] or {}).get("weeklyPlan") or {}
+        _post_schedule(weekly_plan, comfort_c, reduced_c)
 
     def get_remocon_data(self, kwargs):
         self.log("Fetching remocon data...")
@@ -387,10 +506,16 @@ class Remocon(hass.Hass):
                 result_json = json.loads(response.text)
                 if result_json["ok"]:
                     # get zone data
+                    # progIds selects which time programmes come back in
+                    # `data.timeProgs`. Per the BSB enum, 1..6 are heating
+                    # zones ChZn1..ChZn6, 7 is DHW and 9..14 are the cooling
+                    # zones, so [zone] asks for the schedule of the heating
+                    # zone this app is already configured for. The previous
+                    # value was the string "null", which requests none.
                     payload = {
                         "useCache": True,
                         "zone": zone,
-                        "filter": {"progIds": "null", "plant": True, "zone": True},
+                        "filter": {"progIds": [zone], "plant": True, "zone": True},
                     }
                     data_url = urljoin(
                         base_url, posixpath.join("R2/PlantHomeBsb/GetData", gateway)
