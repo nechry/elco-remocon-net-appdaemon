@@ -39,21 +39,18 @@ class Remocon(hass.Hass):
     def post_to_entities(self, data):
         self.log("Posting to entities...")
 
+        token = "Bearer {}".format(self.args["bearer_token"])
+        headers = {"Authorization": token, "Content-Type": "application/json"}
+        
         def _post_data(sensor, payload):
             try:
-                # elco_sensor = self.get_entity(sensor)
-                # if elco_sensor is None:
                 entity_url = f"{ha_url}/api/states/{sensor}"
-                token = "Bearer {}".format(self.args["bearer_token"])
-                headers = {"Authorization": token, "Content-Type": "application/json"}
-                requests.post(entity_url, json=payload, headers=headers)
-                self.log(f"Set state on entity {sensor}")
-                # else:
-                #     elco_sensor.set_state(state = payload["state"], attributes = payload["attributes"])
-                #     self.log(f"update state of {sensor}")
-
+                r = requests.post(entity_url, json=payload, headers=headers, timeout=10)
+                if r.status_code >= 400:
+                    self.log(f"HA rejected {sensor}: {r.status_code} {r.text}",
+                             level="WARNING")
             except Exception as e:
-                self.log(e)
+                self.log(f"POST {sensor} failed: {e}", level="WARNING")
 
         def _post_plantData(plantData):
             data = {
