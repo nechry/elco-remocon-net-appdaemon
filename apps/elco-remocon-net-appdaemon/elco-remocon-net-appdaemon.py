@@ -20,15 +20,21 @@ WEEKDAY_SUFFIX = {
 
 class Remocon(hass.Hass):
     def initialize(self):
-        refresh_rate = self.args.get("refresh_rate")
-        if refresh_rate is None:
-            refresh_rate = 60
+        refresh_rate = int(self.args.get("refresh_rate", 60))
+        self.refresh_rate = refresh_rate
         self.log(f"Will fetch remocon.net data every {refresh_rate} min")
-        self.run_every(self.get_remocon_data, datetime.now(), refresh_rate * 60)
-        # fetch data immediately on startup
-        self.log("Fetching remocon.net data immediately on startup")        
-        self.get_remocon_data(None)
-        self.log("Fetching remocon.net data completed")
+        self.listen_event(self._on_hass_ready, "plugin_started")
+        # fallback in case plugin_started already fired before we subscribed
+        self.run_in(self._on_hass_ready, 10, name="HASS")
+    
+    def _on_hass_ready(self, event_name=None, data=None, kwargs=None):
+        if data and data.get("name") != "HASS":
+            return
+        if getattr(self, "_scheduled", False):
+            return
+        self._scheduled = True
+        self.run_in(self.get_remocon_data, 0)
+        self.run_every(self.get_remocon_data, f"now+{self.refresh_rate * 60}", self.refresh_rate * 60)
 
     def post_to_entities(self, data):
         self.log("Posting to entities...")
